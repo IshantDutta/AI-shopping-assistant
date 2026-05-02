@@ -1,0 +1,7 @@
+<script type="module">
+    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+    Chatbot.init({
+        chatflowid: "a7e2eed7-56da-4de2-9b81-219a5a6f2dc0",
+        apiHost: "https://cloud.flowiseai.com",
+    })
+</script>
