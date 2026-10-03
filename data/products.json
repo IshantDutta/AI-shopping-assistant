@@ -1,0 +1,82 @@
+[
+    {
+        "name": "WH-1000XM5",
+        "brand": "Sony",
+        "category": "Headphones",
+        "price": 29999,
+        "rating": 4.5,
+        "description": "Premium wireless headphones with active noise cancellation and high quality sound.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "Tune 770NC",
+        "brand": "JBL",
+        "category": "Headphones",
+        "price": 4999,
+        "rating": 4.3,
+        "description": "Wireless headphones with active noise cancellation and long battery life.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "QuietComfort",
+        "brand": "Bose",
+        "category": "Headphones",
+        "price": 24999,
+        "rating": 4.6,
+        "description": "Comfortable wireless headphones with strong noise cancellation.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "AirPods Pro",
+        "brand": "Apple",
+        "category": "Earbuds",
+        "price": 24900,
+        "rating": 4.5,
+        "description": "Premium wireless earbuds with active noise cancellation and transparency mode.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "Galaxy Buds FE",
+        "brand": "Samsung",
+        "category": "Earbuds",
+        "price": 7999,
+        "rating": 4.2,
+        "description": "Wireless earbuds with active noise cancellation and comfortable fit.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "G435 LIGHTSPEED",
+        "brand": "Logitech",
+        "category": "Gaming Headset",
+        "price": 6995,
+        "rating": 4.3,
+        "description": "Lightweight wireless gaming headset designed for gaming and everyday use.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "BlackShark V2",
+        "brand": "Razer",
+        "category": "Gaming Headset",
+        "price": 5999,
+        "rating": 4.4,
+        "description": "Gaming headset with detailed audio and a dedicated microphone.",
+        "image_url": "",
+        "product_url": ""
+    },
+    {
+        "name": "WH-CH520",
+        "brand": "Sony",
+        "category": "Headphones",
+        "price": 4490,
+        "rating": 4.4,
+        "description": "Affordable wireless headphones with long battery life.",
+        "image_url": "",
+        "product_url": ""
+    }
+]
