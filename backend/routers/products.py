@@ -1,58 +1,27 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from database import get_db
+from schemas import ProductOut
+from services.product_service import search_catalog, get_product
 
-from database import SessionLocal
-from services.product_service import (
-    get_all_products,
-    get_product_by_id,
-    search_products
-)
+router = APIRouter(prefix="/products", tags=["Products"])
 
 
-router = APIRouter(
-    prefix="/products",
-    tags=["Products"]
-)
-
-
-def get_db():
-    db = SessionLocal()
-
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@router.get("/")
-def get_products(
-    query: str | None = Query(default=None),
-    category: str | None = Query(default=None),
-    max_price: float | None = Query(default=None),
-    db: Session = Depends(get_db)
+@router.get("/", response_model=list[ProductOut])
+def list_products(
+    query: str | None = None,
+    category: str | None = None,
+    max_price: float | None = Query(default=None, ge=0),
+    min_rating: float | None = Query(default=None, ge=0, le=5),
+    db: Session = Depends(get_db),
 ):
-    return search_products(
-        db=db,
-        query=query,
-        category=category,
-        max_price=max_price
-    )
+    products = search_catalog(db, query, category, max_price, min_rating)
+    return [ProductOut.model_validate(p).model_copy(update={"source": "catalog"}) for p in products]
 
 
-@router.get("/{product_id}")
-def get_product(
-    product_id: int,
-    db: Session = Depends(get_db)
-):
-    product = get_product_by_id(
-        db,
-        product_id
-    )
-
+@router.get("/{product_id}", response_model=ProductOut)
+def product_detail(product_id: int, db: Session = Depends(get_db)):
+    product = get_product(db, product_id)
     if not product:
-        raise HTTPException(
-            status_code=404,
-            detail="Product not found"
-        )
-
-    return product
+        raise HTTPException(status_code=404, detail="Product not found")
+    return ProductOut.model_validate(product)
