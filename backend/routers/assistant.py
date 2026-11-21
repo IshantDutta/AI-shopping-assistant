@@ -1,56 +1,114 @@
+import logging
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import get_db
-from schemas import ChatRequest, CompareRequest
-from services.product_service import search_catalog
-from services.live_search_service import search_google_shopping
-from services.recommendation_service import recommend
-from services.ai_service import generate_shopping_advice
 
+from database import get_db
+from models import Product
+from schemas import ChatRequest, CompareRequest
+from services.ai_service import (
+    generate_shopping_advice,
+    get_gemini_model,
+    is_gemini_configured,
+)
+from services.live_search_service import (
+    LiveSearchError,
+    is_live_search_configured,
+    search_google_shopping,
+)
+from services.product_service import extract_budget, search_catalog
+from services.recommendation_service import recommend
+
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/assistant", tags=["AI Assistant"])
 
 
 @router.post("/chat")
 def chat(request: ChatRequest, db: Session = Depends(get_db)):
+    # Use an explicit budget from the UI first; otherwise parse it from the message.
+    budget = request.max_price
+    if budget is None:
+        budget = extract_budget(request.message)
+
     catalog_rows = search_catalog(
         db,
         query=request.message,
         category=request.category,
-        max_price=request.max_price,
+        max_price=budget,
     )
+
     catalog = [{
-        "id": p.id, "name": p.name, "brand": p.brand, "category": p.category,
-        "price": p.price, "price_label": f"₹{p.price:,.0f}",
-        "rating": p.rating, "description": p.description,
-        "image_url": p.image_url, "product_url": p.product_url, "source": "catalog",
-    } for p in catalog_rows]
+        "id": product.id,
+        "name": product.name,
+        "brand": product.brand,
+        "category": product.category,
+        "price": product.price,
+        "price_label": f"₹{product.price:,.0f}",
+        "rating": product.rating,
+        "description": product.description,
+        "image_url": product.image_url,
+        "product_url": product.product_url,
+        "source": "catalog",
+    } for product in catalog_rows]
 
     live = []
-    if request.use_live_search:
-        live = search_google_shopping(request.message, request.max_price)
+    live_error = None
+    if request.use_live_search and is_live_search_configured():
+        try:
+            live = search_google_shopping(request.message, budget)
+        except LiveSearchError as exc:
+            live_error = str(exc)
+            logger.warning("%s", live_error)
 
-    # Hybrid: catalog and live results are both returned, with source clearly identified.
     combined = catalog + live
-    ranked = recommend(combined, request.max_price, limit=12)
+    ranked = recommend(combined, budget, limit=12)
     answer = generate_shopping_advice(request.message, ranked)
+
     return {
         "message": answer,
         "products": ranked,
         "sources": {
             "catalog_count": len(catalog),
             "live_count": len(live),
-            "live_search_configured": bool(__import__("os").getenv("SERPAPI_API_KEY")),
+            "live_search_configured": is_live_search_configured(),
+            "live_search_error": live_error,
+            "ai_provider": "Gemini",
+            "ai_configured": is_gemini_configured(),
+            "ai_model": get_gemini_model(),
+        },
+        "applied_filters": {
+            "max_price": budget,
+            "category": request.category,
         },
     }
 
 
 @router.post("/compare")
 def compare_products(request: CompareRequest, db: Session = Depends(get_db)):
-    from models import Product
     rows = db.query(Product).filter(Product.id.in_(request.product_ids)).all()
+    by_id = {product.id: product for product in rows}
+    ordered = [by_id[product_id] for product_id in request.product_ids if product_id in by_id]
+
     return {
         "products": [{
-            "id": p.id, "name": p.name, "brand": p.brand, "category": p.category,
-            "price": p.price, "rating": p.rating, "description": p.description,
-        } for p in rows]
+            "id": product.id,
+            "name": product.name,
+            "brand": product.brand,
+            "category": product.category,
+            "price": product.price,
+            "rating": product.rating,
+            "description": product.description,
+            "image_url": product.image_url,
+            "product_url": product.product_url,
+        } for product in ordered]
+    }
+
+
+@router.get("/status")
+def assistant_status():
+    return {
+        "ai_provider": "Gemini",
+        "ai_configured": is_gemini_configured(),
+        "ai_model": get_gemini_model(),
+        "live_search_configured": is_live_search_configured(),
     }

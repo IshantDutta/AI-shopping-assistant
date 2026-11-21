@@ -12,3 +12,15 @@
 @media(max-width:1100px){.content-wrap{padding:0 25px}.topbar{padding:0 25px}.dashboard-grid{grid-template-columns:minmax(0,1fr) 230px}.hero-art{right:2%}}
 @media(max-width:850px){.sidebar{transform:translateX(-100%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.main-area{margin-left:0}.mobile-menu{display:grid;margin-right:10px}.topbar{justify-content:flex-start}.breadcrumb{flex:1}.top-actions{margin-left:auto}.dashboard-grid{grid-template-columns:1fr}.right-column{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-art{opacity:.55;right:-40px}}
 @media(max-width:600px){.content-wrap{padding:0 14px}.topbar{height:58px;padding:0 14px}.top-status{display:none}.hero{padding:26px 22px;min-height:205px;margin-top:18px}.hero h1{font-size:31px}.hero-art{right:-115px;opacity:.28}.dashboard-grid{gap:12px}.right-column{grid-template-columns:1fr}.filter-bar{flex-wrap:wrap}.search-field{flex-basis:100%}.filter-bar select{flex:1}.budget-field{flex:1}.filter-button{height:38px}.product-grid{grid-template-columns:1fr}.product-image{height:155px}.chat-panel{padding:15px 12px}.chat-intro p{font-size:10px}.prompt-list button{font-size:9px}.section-heading h2{font-size:18px}footer span{float:none;display:block;margin-top:6px}}
+
+/* Local SVG product previews ensure cards always have a visual. */
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 7px;
+  display: block;
+}
+.product-image {
+  background: linear-gradient(135deg, #171f32, #20254a);
+}

@@ -1,26 +1,27 @@
-# API quick reference
+# ShopMate AI API quick reference
+
+## GET /health
+Returns backend health status.
 
 ## GET /products/
-Query parameters: `query`, `category`, `max_price`, `min_rating`.
+Parameters: `query`, `category`, `max_price`, `min_rating`.
 
-## GET /products/{product_id}
-Returns one catalog product or 404.
+## GET /assistant/status
+Returns whether Gemini and SerpApi keys are configured and the selected Gemini model. It never returns the keys.
 
 ## POST /assistant/chat
-Body:
 ```json
 {
-  "message": "Need headphones for travel",
-  "max_price": 5000,
-  "category": "Headphones",
+  "message": "Find wireless headphones under ₹5,000",
+  "max_price": null,
+  "category": null,
   "use_live_search": true
 }
 ```
-Response includes `message`, `products`, and `sources`.
+Returns `message`, `products`, `sources` and `applied_filters`.
 
 ## POST /assistant/compare
-Body:
 ```json
 {"product_ids": [1, 2]}
 ```
-Returns the catalog records for the supplied IDs.
+Returns catalog products in the order of the submitted IDs.

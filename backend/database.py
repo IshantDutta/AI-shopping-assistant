@@ -1,8 +1,8 @@
 from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Keep the SQLite database inside backend/, including when launched from project root.
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE_URL = f"sqlite:///{(BASE_DIR / 'shopping.db').as_posix()}"
 
@@ -11,7 +11,12 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
     future=True,
 )
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+    future=True,
+)
 Base = declarative_base()
 
 

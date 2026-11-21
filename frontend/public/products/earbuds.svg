@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#242b52"/><stop offset="1" stop-color="#121a31"/></linearGradient>
+ <linearGradient id="item" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a99aff"/><stop offset="1" stop-color="#5d56c8"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="640" height="420" rx="28" fill="url(#bg)"/>
+<circle cx="320" cy="210" r="145" fill="#7d70ed" opacity=".13"/>
+<ellipse cx="320" cy="335" rx="150" ry="18" fill="#050914" opacity=".55" filter="url(#shadow)"/>
+
+<g transform="rotate(-13 250 220)"><path d="M195 104c-36 0-65 29-65 65v58c0 33 25 59 57 59h19c20 0 36-16 36-36V169c0-36-20-65-47-65z" fill="url(#item)" stroke="#ddd8ff" stroke-width="7"/><rect x="185" y="244" width="45" height="105" rx="22" fill="#8f83fa" stroke="#ddd8ff" stroke-width="6"/></g>
+<g transform="rotate(13 390 220)"><path d="M445 104c36 0 65 29 65 65v58c0 33-25 59-57 59h-19c-20 0-36-16-36-36V169c0-36 20-65 47-65z" fill="url(#item)" stroke="#ddd8ff" stroke-width="7"/><rect x="410" y="244" width="45" height="105" rx="22" fill="#8f83fa" stroke="#ddd8ff" stroke-width="6"/></g>
+<text x="320" y="390" text-anchor="middle" fill="#c9c4ff" font-family="Arial,sans-serif" font-size="16" letter-spacing="3">SHOPMATE PRODUCT PREVIEW</text></svg>

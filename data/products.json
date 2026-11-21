@@ -1,82 +1,122 @@
 [
-    {
-        "name": "WH-1000XM5",
-        "brand": "Sony",
-        "category": "Headphones",
-        "price": 29999,
-        "rating": 4.5,
-        "description": "Premium wireless headphones with active noise cancellation and high quality sound.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "Tune 770NC",
-        "brand": "JBL",
-        "category": "Headphones",
-        "price": 4999,
-        "rating": 4.3,
-        "description": "Wireless headphones with active noise cancellation and long battery life.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "QuietComfort",
-        "brand": "Bose",
-        "category": "Headphones",
-        "price": 24999,
-        "rating": 4.6,
-        "description": "Comfortable wireless headphones with strong noise cancellation.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "AirPods Pro",
-        "brand": "Apple",
-        "category": "Earbuds",
-        "price": 24900,
-        "rating": 4.5,
-        "description": "Premium wireless earbuds with active noise cancellation and transparency mode.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "Galaxy Buds FE",
-        "brand": "Samsung",
-        "category": "Earbuds",
-        "price": 7999,
-        "rating": 4.2,
-        "description": "Wireless earbuds with active noise cancellation and comfortable fit.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "G435 LIGHTSPEED",
-        "brand": "Logitech",
-        "category": "Gaming Headset",
-        "price": 6995,
-        "rating": 4.3,
-        "description": "Lightweight wireless gaming headset designed for gaming and everyday use.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "BlackShark V2",
-        "brand": "Razer",
-        "category": "Gaming Headset",
-        "price": 5999,
-        "rating": 4.4,
-        "description": "Gaming headset with detailed audio and a dedicated microphone.",
-        "image_url": "",
-        "product_url": ""
-    },
-    {
-        "name": "WH-CH520",
-        "brand": "Sony",
-        "category": "Headphones",
-        "price": 4490,
-        "rating": 4.4,
-        "description": "Affordable wireless headphones with long battery life.",
-        "image_url": "",
-        "product_url": ""
-    }
+  {
+    "name": "WH-1000XM5",
+    "brand": "Sony",
+    "category": "Headphones",
+    "price": 29999,
+    "rating": 4.5,
+    "description": "Premium wireless over-ear headphones with active noise cancellation. Demo catalog entry; verify specifications and current price with the seller.",
+    "image_url": "https://cdn.uniquephoto.com/resources/uniquephoto/images/products/processed/SYCD3506.detail.a.png",
+    "product_url": "https://www.sony.co.in/electronics/headband-headphones/wh-1000xm5"
+  },
+  {
+    "name": "Tune 770NC",
+    "brand": "JBL",
+    "category": "Headphones",
+    "price": 4999,
+    "rating": 4.3,
+    "description": "Wireless over-ear headphones with active noise cancellation. Demo catalog entry; verify specifications and current price with the seller.",
+    "image_url": "https://in.jbl.com/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw24180335/1.JBL_Tune_770NC_Product%20Image_Hero_Black.png?sh=535&sw=535",
+    "product_url": "https://in.jbl.com/JBLT770NCBLK.html"
+  },
+  {
+    "name": "QuietComfort",
+    "brand": "Bose",
+    "category": "Headphones",
+    "price": 24999,
+    "rating": 4.6,
+    "description": "Comfort-focused wireless headphones with noise cancellation. Demo catalog entry; verify specifications and current price with the seller.",
+    "image_url": "https://online.challenger.sg/cdn/shop/files/0017817848961_YGFkwAmtsIaEhafF36QINMFEzOyO5jskbqUppvtv.jpg?v=1764128952",
+    "product_url": "https://www.bose.com/p/headphones/quietcomfort-acoustic-noise-cancelling-headphones/QC-HEADPHONEARN.html"
+  },
+  {
+    "name": "AirPods Pro",
+    "brand": "Apple",
+    "category": "Earbuds",
+    "price": 24900,
+    "rating": 4.5,
+    "description": "Premium true wireless earbuds. Demo catalog entry; verify generation, specifications and current price with the seller.",
+    "image_url": "https://product.hstatic.net/200000722513/product/mwp22_c3552981274e43acaa2fa999645a1b18_a93e0fa0e0334e0e907bda97d5fd5c90_master.png",
+    "product_url": "https://www.apple.com/airpods-pro/"
+  },
+  {
+    "name": "Galaxy Buds FE",
+    "brand": "Samsung",
+    "category": "Earbuds",
+    "price": 7999,
+    "rating": 4.2,
+    "description": "True wireless earbuds. Demo catalog entry; verify specifications and current price with the seller.",
+    "image_url": "https://image-us.samsung.com/SamsungUS/home/mobile/audio/all-audio/galaxy-buds-fe-sm-r400nzaaxar/white/2-Gallery-1600x1200.jpg",
+    "product_url": "https://samsungmobilepress.com/media-assets/galaxy-buds-fe"
+  },
+  {
+    "name": "G435 LIGHTSPEED",
+    "brand": "Logitech",
+    "category": "Gaming Headset",
+    "price": 6995,
+    "rating": 4.3,
+    "description": "Lightweight wireless gaming headset. Demo catalog entry; verify compatibility and current price with the seller.",
+    "image_url": "https://resource.logitechg.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g435/swatches/g435-gaming-headset-gallery-2-blue.png",
+    "product_url": "https://www.logitechg.com/en-in/shop/p/g435-wireless-bluetooth-gaming-headset"
+  },
+  {
+    "name": "BlackShark V2",
+    "brand": "Razer",
+    "category": "Gaming Headset",
+    "price": 5999,
+    "rating": 4.4,
+    "description": "Gaming headset with a dedicated microphone. Demo catalog entry; verify exact model and current price with the seller.",
+    "image_url": "https://d30ek1sgwm2r4c.cloudfront.net/sites/files/treoo/productimg/202008/1050x1050/razer_blackshark_v2_1.jpg",
+    "product_url": "https://www.razer.com/gaming-headsets/razer-blackshark-v2"
+  },
+  {
+    "name": "WH-CH520",
+    "brand": "Sony",
+    "category": "Headphones",
+    "price": 4490,
+    "rating": 4.4,
+    "description": "Affordable wireless on-ear headphones. Demo catalog entry; verify specifications and current price with the seller.",
+    "image_url": "https://item-shopping.c.yimg.jp/i/n/e-earphone_4548736142855_2_d_20230217164240",
+    "product_url": "https://www.sony.co.in/headphones/products/wh-ch520"
+  },
+  {
+    "name": "IdeaPad Slim 5",
+    "brand": "Lenovo",
+    "category": "Laptops",
+    "price": 64990,
+    "rating": 4.2,
+    "description": "Laptop product placeholder for study and everyday productivity. Exact configuration varies; verify CPU, RAM, storage and GPU with the seller.",
+    "image_url": "https://www.technolife.com/image/color_image_TLP-166146_8f8f8f_42fed79c-2e7f-4f1a-a602-b9828cff4cc8.png",
+    "product_url": "https://www.lenovo.com/in/en/"
+  },
+  {
+    "name": "MacBook Air",
+    "brand": "Apple",
+    "category": "Laptops",
+    "price": 89900,
+    "rating": 4.5,
+    "description": "Laptop product placeholder. Exact chip, memory and storage configuration must be verified with the seller.",
+    "image_url": "https://s3.zoommer.ge/zoommer-images/thumbs/0136920_apple-mgna3lla-macbook-air-13-inch-2020-silver_550.png",
+    "product_url": "https://www.apple.com/in/macbook-air/"
+  },
+  {
+    "name": "MX Master 3S",
+    "brand": "Logitech",
+    "category": "Accessories",
+    "price": 8995,
+    "rating": 4.6,
+    "description": "Wireless productivity mouse. Demo catalog entry; verify compatibility and current price with the seller.",
+    "image_url": "https://resource.logitech.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/logitech/en/products/mice/mx-master-3s/2025-update/mx-master-3s-bluetooth-edition-top-view-graphite-new-1.png",
+    "product_url": "https://www.logitech.com/en-in/shop/p/mx-master-3s"
+  },
+  {
+    "name": "K380 Multi-Device",
+    "brand": "Logitech",
+    "category": "Accessories",
+    "price": 2995,
+    "rating": 4.3,
+    "description": "Compact wireless keyboard. Demo catalog entry; verify layout and compatibility with the seller.",
+    "image_url": "https://www.ergostyle.co.nz/cdn/shop/products/k380-grey-gallery-01-ori.png?v=1662946391&width=1600",
+    "product_url": "https://www.logitech.com/en-in/shop/p/k380-multi-device"
+  }
 ]

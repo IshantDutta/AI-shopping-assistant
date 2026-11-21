@@ -4,7 +4,12 @@ import { api } from "./services/api";
 import ProductCard from "./components/ProductCard";
 import ChatPanel from "./components/ChatPanel";
 
-const money = (value) => `₹${Number(value || 0).toLocaleString("en-IN")}`;
+const money = (value) => value === null || value === undefined ? "Price unavailable" : `₹${Number(value).toLocaleString("en-IN")}`;
+
+function readSavedProducts() {
+  try { return JSON.parse(localStorage.getItem("shopmate-saved") || "[]"); }
+  catch { return []; }
+}
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -16,11 +21,12 @@ export default function App() {
   const [error, setError] = useState("");
   const [answer, setAnswer] = useState("");
   const [sources, setSources] = useState(null);
-  const [saved, setSaved] = useState(() => JSON.parse(localStorage.getItem("shopmate-saved") || "[]"));
+  const [saved, setSaved] = useState(readSavedProducts);
   const [selected, setSelected] = useState([]);
   const [compareItems, setCompareItems] = useState(null);
   const [activeTab, setActiveTab] = useState("discover");
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [systemStatus, setSystemStatus] = useState(null);
 
   const categories = useMemo(() => ["Headphones", "Earbuds", "Gaming Headset", "Laptops", "Accessories"], []);
 
@@ -34,7 +40,10 @@ export default function App() {
     finally { setLoading(false); }
   }
 
-  useEffect(() => { loadProducts(); }, []); // Initial catalog load.
+  useEffect(() => {
+    loadProducts();
+    api.status().then(setSystemStatus).catch(() => setSystemStatus(null));
+  }, []); // Initial catalog and provider status.
 
   function toggleSaved(product) {
     const key = product.product_url || `${product.name}-${product.brand}`;
@@ -81,7 +90,7 @@ export default function App() {
           <button className={activeTab === "saved" ? "nav-item active" : "nav-item"} onClick={() => {setActiveTab("saved");setMobileMenu(false);}}><Heart size={18}/> Wishlist <span className="nav-count">{saved.length}</span></button>
         </nav>
         <div className="sidebar-bottom">
-          <div className="status-card"><span className="status-pulse" /><div><b>ShopMate is ready</b><small>Catalog search enabled</small></div></div>
+          <div className="status-card"><span className="status-pulse" /><div><b>ShopMate is ready</b><small>{systemStatus?.ai_configured ? "Gemini AI connected" : "Catalog search enabled"}</small></div></div>
           <div className="profile"><div className="profile-avatar">S</div><div><b>Shopper</b><small>Personal workspace</small></div><span className="profile-dots">•••</span></div>
         </div>
       </aside>
@@ -105,7 +114,7 @@ export default function App() {
           <div className="dashboard-grid">
             <div className="left-column">
               <ChatPanel onAsk={askAssistant} loading={chatLoading}/>
-              {answer && <div className="answer-card"><div className="answer-title"><Sparkles size={16}/> ShopMate's take</div><p>{answer}</p>{sources && <small>Catalog: {sources.catalog_count} · Live results: {sources.live_count}{!sources.live_search_configured ? " · Add SerpApi key to enable live results" : ""}</small>}</div>}
+              {answer && <div className="answer-card"><div className="answer-title"><Sparkles size={16}/> ShopMate's take</div><p>{answer}</p>{sources && <small>Catalog: {sources.catalog_count} · Live results: {sources.live_count} · AI: {sources.ai_provider || "Gemini"}{!sources.live_search_configured ? " · SerpApi key not configured" : ""}</small>}</div>}
               <section className="catalog-section">
                 <div className="section-heading"><div><div className="section-kicker">CURATED FOR YOU</div><h2>{activeTab === "saved" ? "Your wishlist" : "Explore products"}</h2></div><button className="refresh-button" onClick={loadProducts}><RefreshCw size={15}/> Refresh</button></div>
                 <div className="filter-bar">
@@ -123,7 +132,7 @@ export default function App() {
             </div>
             <aside className="right-column">
               <div className="insight-card"><div className="insight-icon"><Sparkles size={18}/></div><div className="section-kicker">SHOPPING, SIMPLIFIED</div><h3>Less scrolling.<br/><span>Better decisions.</span></h3><p>Let your requirements guide the search. ShopMate brings product options into one place.</p><div className="insight-line"><span>01</span> Describe what you need</div><div className="insight-line"><span>02</span> Review matched products</div><div className="insight-line"><span>03</span> Compare before you buy</div></div>
-              <div className="source-card"><div className="source-card-head"><span className="source-indicator"/> DATA SOURCES</div><div className="source-row"><span>Local product catalog</span><b className="enabled">Connected</b></div><div className="source-row"><span>Google Shopping</span><b className={sources?.live_search_configured ? "enabled" : "optional"}>{sources?.live_search_configured ? "Enabled" : "API key optional"}</b></div><div className="source-row"><span>AI explanations</span><b className="optional">API key optional</b></div><small>Live search and AI require provider API keys in backend/.env.</small></div>
+              <div className="source-card"><div className="source-card-head"><span className="source-indicator"/> DATA SOURCES</div><div className="source-row"><span>Local product catalog</span><b className="enabled">Connected</b></div><div className="source-row"><span>Google Shopping</span><b className={sources?.live_search_configured ? "enabled" : "optional"}>{sources?.live_search_configured ? "Enabled" : "API key optional"}</b></div><div className="source-row"><span>Gemini AI</span><b className={systemStatus?.ai_configured ? "enabled" : "optional"}>{systemStatus?.ai_configured ? "Key detected" : "API key needed"}</b></div><small>Gemini and live shopping require provider API keys in backend/.env.</small></div>
             </aside>
           </div>
           <footer>© 2026 ShopMate AI <span>Built for smarter shopping decisions.</span></footer>

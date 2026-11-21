@@ -1,5 +1,6 @@
-from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ProductOut(BaseModel):
@@ -9,19 +10,25 @@ class ProductOut(BaseModel):
     name: str
     brand: str = ""
     category: str
-    price: float
+    price: Optional[float] = None
     rating: Optional[float] = None
     description: Optional[str] = None
     image_url: Optional[str] = None
     product_url: Optional[str] = None
+    price_label: Optional[str] = None
     source: str = "catalog"
 
 
 class ChatRequest(BaseModel):
     message: str = Field(min_length=2, max_length=1000)
     max_price: Optional[float] = Field(default=None, ge=0)
-    category: Optional[str] = None
+    category: Optional[str] = Field(default=None, max_length=120)
     use_live_search: bool = True
+
+    @field_validator("category")
+    @classmethod
+    def clean_category(cls, value):
+        return value.strip() if value else value
 
 
 class CompareRequest(BaseModel):

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#242b52"/><stop offset="1" stop-color="#121a31"/></linearGradient>
+ <linearGradient id="item" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a99aff"/><stop offset="1" stop-color="#5d56c8"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="640" height="420" rx="28" fill="url(#bg)"/>
+<circle cx="320" cy="210" r="145" fill="#7d70ed" opacity=".13"/>
+<ellipse cx="320" cy="335" rx="150" ry="18" fill="#050914" opacity=".55" filter="url(#shadow)"/>
+
+<path d="M170 235c0-81 66-147 150-147s150 66 150 147" fill="none" stroke="#ddd8ff" stroke-width="27" stroke-linecap="round"/>
+<rect x="130" y="210" width="105" height="135" rx="34" fill="url(#item)" stroke="#ddd8ff" stroke-width="7"/>
+<rect x="405" y="210" width="105" height="135" rx="34" fill="url(#item)" stroke="#ddd8ff" stroke-width="7"/>
+<rect x="150" y="232" width="65" height="90" rx="23" fill="#39347d"/>
+<rect x="425" y="232" width="65" height="90" rx="23" fill="#39347d"/>
+<path d="M480 315c-4 42-40 50-72 50" stroke="#c9c3ff" stroke-width="9" fill="none" stroke-linecap="round"/>
+<circle cx="401" cy="365" r="10" fill="#a89aff"/>
+<text x="320" y="390" text-anchor="middle" fill="#c9c4ff" font-family="Arial,sans-serif" font-size="16" letter-spacing="3">SHOPMATE PRODUCT PREVIEW</text></svg>
