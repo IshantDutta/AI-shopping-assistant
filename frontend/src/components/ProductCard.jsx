@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Heart, ExternalLink, GitCompareArrows, Star, ImageOff } from "lucide-react";
+import {
+  Heart,
+  ExternalLink,
+  GitCompareArrows,
+  Star,
+  ShoppingCart,
+} from "lucide-react";
 
 const FALLBACK_BY_CATEGORY = {
   headphones: "/products/headphones.svg",
@@ -14,10 +20,14 @@ function getFallback(product) {
   return FALLBACK_BY_CATEGORY[category] || "/products/accessories.svg";
 }
 
-function getImageUrl(url) {
-  if (!url) return "";
-  if (url.startsWith("/")) return url;
-  return url;
+function formatPrice(product) {
+  if (product.price_label && !product.price_label.includes("�")) {
+    return product.price_label;
+  }
+  if (product.price !== null && product.price !== undefined) {
+    return `₹${Number(product.price).toLocaleString("en-IN")}`;
+  }
+  return "Price unavailable";
 }
 
 export default function ProductCard({
@@ -30,26 +40,23 @@ export default function ProductCard({
   const [imageFailed, setImageFailed] = useState(false);
   const imageUrl = imageFailed || !product.image_url
     ? getFallback(product)
-    : getImageUrl(product.image_url);
+    : product.image_url;
 
-  const price = product.price_label ||
-    (product.price !== null && product.price !== undefined
-      ? `₹${Number(product.price).toLocaleString("en-IN")}`
-      : "Price unavailable");
+  const isLive = product.source === "live";
+  const merchant = product.brand || "Online marketplace";
+  const hasPurchaseLink = Boolean(product.product_url);
 
   return (
     <article className="product-card">
       <div className="product-image">
         <img
           src={imageUrl}
-          alt={`${product.brand || ""} ${product.name}`}
+          alt={`${merchant} ${product.name}`}
           loading="lazy"
-          onError={() => {
-            if (!imageFailed) setImageFailed(true);
-          }}
+          onError={() => setImageFailed(true)}
         />
-        <span className={`source-tag ${product.source === "live" ? "live" : ""}`}>
-          {product.source === "live" ? "LIVE RESULT" : "CATALOG"}
+        <span className={`source-tag ${isLive ? "live" : ""}`}>
+          {isLive ? "LIVE PRICE" : "CATALOG"}
         </span>
         <button
           className={`icon-button save-button ${saved ? "active" : ""}`}
@@ -62,17 +69,16 @@ export default function ProductCard({
       </div>
 
       <div className="product-content">
-        <div className="eyebrow">
-          {product.brand || "Marketplace"} · {product.category || "Product"}
-        </div>
-        <h3>{product.name}</h3>
+        <div className="eyebrow merchant-eyebrow">{merchant}</div>
+        <h3 title={product.name}>{product.name}</h3>
         <div className="product-meta">
-          <span className="price">{price}</span>
+          <span className="price">{formatPrice(product)}</span>
           {product.rating
             ? <span className="rating"><Star size={14} fill="currentColor" /> {product.rating}</span>
-            : <span className="muted">No rating</span>}
+            : <span className="muted">Rating unavailable</span>}
         </div>
-        <p>{product.description || "Product details may vary by seller."}</p>
+        <p>{product.description || "Check the seller page for product details, stock and delivery."}</p>
+
         <div className="card-actions">
           <label className="compare-check">
             <input
@@ -82,15 +88,20 @@ export default function ProductCard({
             />
             <GitCompareArrows size={15} /> Compare
           </label>
-          {product.product_url && (
+          {hasPurchaseLink ? (
             <a
-              className="merchant-link"
+              className="buy-now-link"
               href={product.product_url}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
+              aria-label={`Buy ${product.name} from ${merchant}`}
             >
-              View deal <ExternalLink size={14} />
+              <ShoppingCart size={14} />
+              Buy now
+              <ExternalLink size={13} />
             </a>
+          ) : (
+            <span className="muted no-link">Link unavailable</span>
           )}
         </div>
       </div>

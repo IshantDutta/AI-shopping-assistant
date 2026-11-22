@@ -24,3 +24,30 @@
 .product-image {
   background: linear-gradient(135deg, #171f32, #20254a);
 }
+
+
+/* ShopMate product-card and assistant response polish */
+.merchant-eyebrow { color: #a9b5d0; font-weight: 700; letter-spacing: .35px; }
+.buy-now-link {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 31px; padding: 0 10px; border-radius: 7px;
+  background: linear-gradient(135deg, #8173f0, #6558d5);
+  color: #fff; text-decoration: none; font-size: 10px; font-weight: 700;
+  transition: transform .15s ease, filter .15s ease;
+}
+.buy-now-link:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.no-link { font-size: 9px; }
+.assistant-markdown { margin-top: 10px; }
+.assistant-markdown .answer-paragraph {
+  margin: 7px 0; color: #c1c9da; font-size: 12px; line-height: 1.75; white-space: normal;
+}
+.assistant-markdown .answer-heading {
+  margin: 13px 0 6px; color: #e8e9ff; font: 700 14px Manrope, sans-serif;
+}
+.assistant-markdown h4.answer-heading { font-size: 12px; }
+.assistant-markdown strong { color: #f1efff; font-weight: 700; }
+.assistant-markdown .answer-list {
+  margin: 7px 0 10px; padding-left: 20px; color: #c1c9da;
+  font-size: 12px; line-height: 1.75;
+}
+.assistant-markdown .answer-list li { padding: 2px 0; }

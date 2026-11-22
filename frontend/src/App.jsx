@@ -6,6 +6,84 @@ import ChatPanel from "./components/ChatPanel";
 
 const money = (value) => value === null || value === undefined ? "Price unavailable" : `₹${Number(value).toLocaleString("en-IN")}`;
 
+
+function renderAssistantText(text) {
+  // Safe, dependency-free Markdown renderer for Gemini responses.
+  const lines = String(text || "").split(/\r?\n/);
+  const blocks = [];
+  let listItems = [];
+  let listType = null;
+
+  const renderInline = (value) => {
+    const tokens = value.split(/(\[[^\]]+\]\(https?:\/\/[^)\s]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g);
+    return tokens.map((token, index) => {
+      const link = token.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+      if (link) {
+        return <a key={index} href={link[2]} target="_blank" rel="noopener noreferrer">{link[1]}</a>;
+      }
+      if (token.startsWith("**") && token.endsWith("**")) {
+        return <strong key={index}>{token.slice(2, -2)}</strong>;
+      }
+      if (token.startsWith("*") && token.endsWith("*")) {
+        return <em key={index}>{token.slice(1, -1)}</em>;
+      }
+      return token;
+    });
+  };
+
+  const flushList = () => {
+    if (!listItems.length) return;
+    const Tag = listType === "ol" ? "ol" : "ul";
+    blocks.push(
+      <Tag className="answer-list" key={`list-${blocks.length}`}>
+        {listItems.map((item, index) => <li key={index}>{renderInline(item)}</li>)}
+      </Tag>
+    );
+    listItems = [];
+    listType = null;
+  };
+
+  lines.forEach((rawLine, index) => {
+    const line = rawLine.trim();
+    if (!line || /^---+$/.test(line) || /^\*\*\*+$/.test(line)) {
+      flushList();
+      return;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      flushList();
+      const Tag = heading[1].length <= 2 ? "h3" : "h4";
+      blocks.push(
+        <Tag className="answer-heading" key={`heading-${index}`}>
+          {renderInline(heading[2])}
+        </Tag>
+      );
+      return;
+    }
+
+    const ordered = line.match(/^\d+[.)]\s+(.+)$/);
+    const unordered = line.match(/^[-*•]\s+(.+)$/);
+    if (ordered || unordered) {
+      const nextType = ordered ? "ol" : "ul";
+      if (listType && listType !== nextType) flushList();
+      listType = nextType;
+      listItems.push((ordered || unordered)[1]);
+      return;
+    }
+
+    flushList();
+    blocks.push(
+      <p className="answer-paragraph" key={`paragraph-${index}`}>
+        {renderInline(line)}
+      </p>
+    );
+  });
+
+  flushList();
+  return blocks;
+}
+
 function readSavedProducts() {
   try { return JSON.parse(localStorage.getItem("shopmate-saved") || "[]"); }
   catch { return []; }
@@ -114,7 +192,7 @@ export default function App() {
           <div className="dashboard-grid">
             <div className="left-column">
               <ChatPanel onAsk={askAssistant} loading={chatLoading}/>
-              {answer && <div className="answer-card"><div className="answer-title"><Sparkles size={16}/> ShopMate's take</div><p>{answer}</p>{sources && <small>Catalog: {sources.catalog_count} · Live results: {sources.live_count} · AI: {sources.ai_provider || "Gemini"}{!sources.live_search_configured ? " · SerpApi key not configured" : ""}</small>}</div>}
+              {answer && <div className="answer-card"><div className="answer-title"><Sparkles size={16}/> ShopMate's take</div><div className="assistant-markdown">{renderAssistantText(answer)}</div>{sources && <small>Catalog: {sources.catalog_count} · Live results: {sources.live_count} · AI: {sources.ai_provider || "Gemini"}{!sources.live_search_configured ? " · SerpApi key not configured" : ""}</small>}</div>}
               <section className="catalog-section">
                 <div className="section-heading"><div><div className="section-kicker">CURATED FOR YOU</div><h2>{activeTab === "saved" ? "Your wishlist" : "Explore products"}</h2></div><button className="refresh-button" onClick={loadProducts}><RefreshCw size={15}/> Refresh</button></div>
                 <div className="filter-bar">
