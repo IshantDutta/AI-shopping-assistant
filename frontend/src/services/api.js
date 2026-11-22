@@ -41,8 +41,8 @@ export const api = {
     method: "POST",
     body: JSON.stringify(payload),
   }),
-  compare: (product_ids) => request("/assistant/compare", {
+  compare: (products) => request("/assistant/compare", {
     method: "POST",
-    body: JSON.stringify({ product_ids }),
+    body: JSON.stringify({ products }),
   }),
 };

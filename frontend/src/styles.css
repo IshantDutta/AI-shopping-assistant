@@ -51,3 +51,28 @@
   font-size: 12px; line-height: 1.75;
 }
 .assistant-markdown .answer-list li { padding: 2px 0; }
+
+.comparison-winner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  margin: 0 0 14px;
+  border: 1px solid #514a91;
+  border-radius: 9px;
+  background: #211f42;
+  color: #c9c2ff;
+  font-size: 11px;
+}
+.comparison-winner small {
+  display: block;
+  margin-top: 5px;
+  color: #a7aec5;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.compare-buy-link { color: #b6aaff; font-weight: 700; text-decoration: none; }
+.compare-buy-link:hover { text-decoration: underline; }
+.comparison-disclaimer { color: #8793ab; font-size: 10px; line-height: 1.6; margin: 12px 2px 0; }
+.compare-table { overflow-x: auto; }
+.compare-row { grid-template-columns: 130px repeat(2, minmax(155px, 1fr)); }

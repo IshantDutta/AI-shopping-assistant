@@ -148,12 +148,20 @@ export default function App() {
   }
 
   async function compareSelected() {
-    const ids = selected.filter((id) => typeof id === "number");
-    if (ids.length < 2) { setError("Choose at least two catalog products to compare. Live results cannot be compared in this version."); return; }
+    const selectedProducts = products.filter((product) =>
+      selected.includes(product.id ?? product.product_url ?? product.name)
+    );
+    if (selectedProducts.length < 2) {
+      setError("Select at least two products from the current results to compare.");
+      return;
+    }
     try {
-      const result = await api.compare(ids);
-      setCompareItems(result.products);
-    } catch (e) { setError(e.message); }
+      setError("");
+      const result = await api.compare(selectedProducts);
+      setCompareItems(result);
+    } catch (e) {
+      setError(e.message);
+    }
   }
 
   const visibleProducts = activeTab === "saved" ? saved : products;
@@ -217,7 +225,47 @@ export default function App() {
         </div>
       </main>
 
-      {compareItems && <div className="modal-backdrop" onClick={()=>setCompareItems(null)}><div className="compare-modal" onClick={e=>e.stopPropagation()}><div className="modal-heading"><div><span className="section-kicker">SIDE-BY-SIDE</span><h2>Product comparison</h2></div><button className="icon-button" onClick={()=>setCompareItems(null)}><X size={19}/></button></div><div className="compare-table"><div className="compare-row compare-header"><b>Product</b>{compareItems.map(p=><b key={p.id}>{p.name}</b>)}</div>{[["Brand",p=>p.brand],["Category",p=>p.category],["Price",p=>money(p.price)],["Rating",p=>p.rating?`${p.rating} / 5`:"Not listed"],["Description",p=>p.description]].map(([label,get])=><div className="compare-row" key={label}><b>{label}</b>{compareItems.map(p=><span key={p.id}>{get(p)}</span>)}</div>)}</div></div></div>}
+      {compareItems && <div className="modal-backdrop" onClick={()=>setCompareItems(null)}>
+        <div className="compare-modal" onClick={e=>e.stopPropagation()}>
+          <div className="modal-heading">
+            <div><span className="section-kicker">SIDE-BY-SIDE</span><h2>Product comparison</h2></div>
+            <button className="icon-button" onClick={()=>setCompareItems(null)}><X size={19}/></button>
+          </div>
+          {compareItems.summary?.best_value_name && <div className="comparison-winner">
+            <Sparkles size={17}/>
+            <div><b>Best value by available data: {compareItems.summary.best_value_name}</b>
+              <small>{compareItems.summary.method}</small></div>
+          </div>}
+          <div className="compare-table">
+            <div className="compare-row compare-header" style={{gridTemplateColumns:`130px repeat(${compareItems.products.length}, minmax(155px, 1fr))`}}>
+              <b>Product</b>{compareItems.products.map((p,i)=><b key={p.product_url || p.id || i}>{p.name}</b>)}
+            </div>
+            <div className="compare-row" style={{gridTemplateColumns:`130px repeat(${compareItems.products.length}, minmax(155px, 1fr))`}}>
+              <b>Value score</b>
+              {compareItems.products.map((p,i) => {
+                const score = compareItems.summary?.scores?.find(item => item.index === i)?.score;
+                return <span key={p.product_url || p.id || `score-${i}`}>{score == null ? "Not enough data" : `${score} / 100`}</span>;
+              })}
+            </div>
+            {[
+              ["Merchant",p=>p.brand || "Not listed"],
+              ["Category",p=>p.category || "Not listed"],
+              ["Price",p=>p.price_label || money(p.price)],
+              ["Rating",p=>p.rating != null ? `${p.rating} / 5` : "Not listed"],
+              ["Source",p=>p.source === "live" ? "Live shopping" : "Catalog"],
+              ["Details",p=>p.description || "No details supplied"],
+              ["Purchase",p=>p.product_url ? "Open merchant page" : "Link unavailable"],
+            ].map(([label,get])=><div className="compare-row" key={label} style={{gridTemplateColumns:`130px repeat(${compareItems.products.length}, minmax(155px, 1fr))`}}>
+              <b>{label}</b>{compareItems.products.map((p,i)=><span key={p.product_url || p.id || `${label}-${i}`}>
+                {label === "Purchase" && p.product_url
+                  ? <a href={p.product_url} target="_blank" rel="noopener noreferrer" className="compare-buy-link">Buy / view offer ↗</a>
+                  : get(p)}
+              </span>)}
+            </div>)}
+          </div>
+          <p className="comparison-disclaimer">{compareItems.summary?.notice}</p>
+        </div>
+      </div>}
     </div>
   );
 }
