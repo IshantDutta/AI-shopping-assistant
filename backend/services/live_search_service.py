@@ -68,6 +68,38 @@ def _is_direct_merchant_url(url: str | None) -> bool:
         return False
 
 
+
+def _availability_status(details) -> tuple[str, list[str]]:
+    """Classify seller availability conservatively from provider offer text."""
+    if isinstance(details, str):
+        values = [details]
+    elif isinstance(details, list):
+        values = [str(value) for value in details if value is not None]
+    elif isinstance(details, dict):
+        values = [str(value) for value in details.values() if value is not None]
+    else:
+        values = []
+
+    text = " ".join(values).lower()
+    unavailable_patterns = (
+        "out of stock", "currently unavailable", "unavailable online",
+        "sold out", "not available", "temporarily unavailable",
+    )
+    available_patterns = (
+        "in stock", "available online", "available now",
+        "usually ships", "ready to ship",
+    )
+
+    if any(pattern in text for pattern in unavailable_patterns):
+        status = "out_of_stock"
+    elif any(pattern in text for pattern in available_patterns):
+        status = "in_stock"
+    else:
+        status = "unknown"
+
+    return status, values
+
+
 def _get_merchant_offers(
     product_id: str,
     api_key: str,
@@ -100,13 +132,18 @@ def _get_merchant_offers(
         except (TypeError, ValueError):
             price = None
 
+        availability_status, availability_details = _availability_status(
+            store.get("details_and_offers", [])
+        )
+
         offers.append({
             "merchant": store.get("name") or "Online merchant",
             "price": price,
             "price_label": store.get("price") or "Price unavailable",
             "product_url": merchant_url,
             "shipping": store.get("shipping"),
-            "availability": store.get("details_and_offers", []),
+            "availability_status": availability_status,
+            "availability_details": availability_details,
             "condition": store.get("condition"),
         })
 
@@ -244,6 +281,8 @@ def search_google_shopping(
             "description": " ".join(description_parts),
             "image_url": item.get("thumbnail"),
             "product_url": best_offer["product_url"],
+            "availability_status": best_offer["availability_status"],
+            "availability_details": best_offer["availability_details"],
             "source": "live",
         })
 
