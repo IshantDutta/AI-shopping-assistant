@@ -244,7 +244,11 @@ export default function App() {
               <b>Value score</b>
               {compareItems.products.map((p,i) => {
                 const score = compareItems.summary?.scores?.find(item => item.index === i)?.score;
-                return <span key={p.product_url || p.id || `score-${i}`}>{score == null ? "Not enough data" : `${score} / 100`}</span>;
+                const scoreInfo = compareItems.summary?.scores?.find(item => item.index === i);
+                return <span key={p.product_url || p.id || `score-${i}`}>
+                  {score == null ? "Not eligible / insufficient data" : `${score} / 100`}
+                  {scoreInfo?.reason && <small className="score-reason">{scoreInfo.reason}</small>}
+                </span>;
               })}
             </div>
             {[
@@ -252,6 +256,7 @@ export default function App() {
               ["Category",p=>p.category || "Not listed"],
               ["Price",p=>p.price_label || money(p.price)],
               ["Rating",p=>p.rating != null ? `${p.rating} / 5` : "Not listed"],
+              ["Availability",p=>p.availability_status === "in_stock" ? "In stock (provider-reported)" : p.availability_status === "out_of_stock" ? "Out of stock" : "Unconfirmed"],
               ["Source",p=>p.source === "live" ? "Live shopping" : "Catalog"],
               ["Details",p=>p.description || "No details supplied"],
               ["Purchase",p=>p.product_url ? "Open merchant page" : "Link unavailable"],
