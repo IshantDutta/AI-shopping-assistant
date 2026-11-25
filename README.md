@@ -1,125 +1,144 @@
-# ShopMate AI 🛍️
+# ShopMate AI
 
-A dark-themed full-stack shopping assistant built with React, FastAPI, SQLite and Google's Gemini API.
+ShopMate AI is a full-stack shopping assistant for users in India. It combines a local product catalogue, optional live Google Shopping discovery through SerpApi, and Gemini-generated product-grounded shopping advice.
 
 ## Features
-- Natural-language shopping queries
-- Local SQLite product catalog
-- Budget extraction from phrases such as "headphones under ₹5,000"
-- Category and price filters
-- Transparent product ranking
-- Gemini-powered shopping explanations (optional API key)
-- Optional live Google Shopping retrieval through SerpApi
-- Product comparison
-- Browser-local wishlist
-- Local SVG product artwork and image fallbacks
-- FastAPI Swagger documentation
+
+- Product catalogue search with category and budget filters.
+- AI-assisted shopping recommendations using Gemini.
+- Optional live shopping results with direct merchant offer links.
+- Side-by-side comparison for 2–4 products.
+- Availability-aware comparison: out-of-stock and unconfirmed items cannot win.
+- Persistent browser wishlist using local storage.
+- Responsive React interface.
+- FastAPI API documentation at `/docs`.
 
 ## Technology
-- Frontend: React 18, Vite, CSS, Lucide
-- Backend: Python, FastAPI, SQLAlchemy, Pydantic
-- Database: SQLite
-- AI: Google Gemini via the official `google-genai` SDK
-- Live product retrieval: SerpApi Google Shopping (optional)
+
+- Frontend: React 18, Vite, JavaScript, Lucide React.
+- Backend: Python, FastAPI, Pydantic, SQLAlchemy.
+- Database: SQLite.
+- AI: Google Gemini API (`google-genai`).
+- Live shopping: SerpApi Google Shopping and Google Product engines.
 
 ## Requirements
-- Python 3.10+
-- Node.js 18+
-- Gemini API key from https://aistudio.google.com/api-keys
-- Optional SerpApi key for live shopping results
 
-## Setup on Windows PowerShell
+- Python 3.10+ (Python 3.11 or 3.12 recommended).
+- Node.js 20+ and npm.
+- Gemini API key (optional; fallback recommendations remain available).
+- SerpApi API key (optional; local catalogue remains available).
 
-Open a terminal at the project root.
+## Local setup
 
-### 1. Backend environment
+### 1. Backend
+
+Open a terminal in the project root:
+
 ```powershell
 cd backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 Copy-Item .env.example .env
 ```
 
-Edit `backend/.env`:
-```env
-GEMINI_API_KEY=your_new_gemini_api_key
-GEMINI_MODEL=gemini-3.8-flash
-SERPAPI_API_KEY=
-SERPAPI_COUNTRY=in
-SERPAPI_LANGUAGE=en
-SERPAPI_LOCATION=
-```
+Edit `backend/.env` and add your own API keys. Never commit `.env`.
 
-Never commit `.env`, share screenshots containing keys, or put keys in frontend code.
+The project includes a SQLite database with sample catalogue records. To create or refresh the sample catalogue from `data/products.json`:
 
-### 2. Seed or update the catalog
-Keep your existing `backend/shopping.db` if you already have one. From the `backend` directory:
 ```powershell
 python seed.py
 ```
-This adds missing demo products and updates image paths for matching products. It does not delete existing rows.
 
-### 3. Start the backend
-From the `backend` directory:
+Start the API:
+
 ```powershell
 python -m uvicorn main:app --reload
 ```
-- API: http://127.0.0.1:8000
-- Swagger: http://127.0.0.1:8000/docs
-- Health: http://127.0.0.1:8000/health
 
-### 4. Start the frontend
-Open a second terminal at the project root:
+Backend: http://127.0.0.1:8000  
+API docs: http://127.0.0.1:8000/docs  
+Health check: http://127.0.0.1:8000/health
+
+### 2. Frontend
+
+Open a second terminal in the project root:
+
 ```powershell
 cd frontend
 npm install
+Copy-Item .env.example .env
 npm run dev
 ```
-Open http://localhost:5173
 
-Optional `frontend/.env`:
-```env
-VITE_API_BASE_URL=http://127.0.0.1:8000
-```
-Restart Vite after changing frontend environment variables.
+Frontend: http://localhost:5173
 
-## API endpoints
-- `GET /`
-- `GET /health`
-- `GET /products/`
-- `GET /products/?query=headphones&max_price=5000`
-- `GET /products/{product_id}`
-- `GET /assistant/status`
-- `POST /assistant/chat`
-- `POST /assistant/compare`
+For a deployed frontend, set `VITE_API_BASE_URL` to the public backend URL in the frontend hosting environment. Set backend `CORS_ORIGINS` to the exact frontend origin(s), comma-separated.
 
-Example chat body:
-```json
-{
-  "message": "Find wireless headphones under ₹5,000",
-  "max_price": null,
-  "category": null,
-  "use_live_search": true
-}
-```
-The backend extracts the ₹5,000 budget from the message if `max_price` is not separately supplied.
+## Tests
 
-## Product images
-The starter catalog uses locally bundled SVG illustrations by category. These are illustrative previews, not manufacturer photographs. Live SerpApi results may include merchant thumbnails.
+From the project root:
 
-## Limitations
-This is a portfolio MVP, not a production marketplace:
-- Sample catalog products and prices are demo records, not a verified live price feed.
-- Live search requires a SerpApi key and is subject to provider limits.
-- Gemini explanations require a valid Gemini key, model access and available quota. Catalog search works without Gemini.
-- Wishlist is stored in browser local storage.
-- Comparison currently supports products in the local catalog.
-- User accounts, persistent price history, review ingestion and price alerts are future features.
-
-## GitHub
 ```powershell
-git add .
-git commit -m "feat: migrate shopping assistant to Gemini"
+cd backend
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+The tests cover health, catalogue access, product comparison, and availability rules. Live Gemini and SerpApi calls are not required for the automated test suite.
+
+## Environment variables
+
+See `backend/.env.example` and `frontend/.env.example`.
+
+- `GEMINI_API_KEY`: Gemini key; optional.
+- `GEMINI_MODEL`: Gemini model name enabled for your account.
+- `SERPAPI_API_KEY`: SerpApi key; optional.
+- `SERPAPI_COUNTRY`, `SERPAPI_LANGUAGE`, `SERPAPI_LOCATION`: shopping search locale.
+- `CORS_ORIGINS`: comma-separated allowed frontend origins.
+- `VITE_API_BASE_URL`: frontend's backend API base URL.
+
+## Deployment notes
+
+1. Deploy the backend with the `backend` directory as the application root and start command:
+
+   ```bash
+   uvicorn main:app --host 0.0.0.0 --port $PORT
+   ```
+
+2. Configure backend environment variables in the hosting provider. Do not upload `.env`.
+3. For a persistent production deployment, use a persistent disk for SQLite or migrate to a managed database.
+4. Deploy the `frontend` directory as a static Vite site. Build command: `npm run build`; output directory: `dist`.
+5. Set `VITE_API_BASE_URL` to the deployed backend URL before building.
+6. Set backend `CORS_ORIGINS` to the deployed frontend origin.
+
+The included SQLite database is suitable for a demo. A host with ephemeral filesystems may reset it on redeploy; use persistent storage or a managed database for reliable production persistence.
+
+## Important limitations
+
+- Shopping prices, seller links and stock data are provider snapshots and may change. Confirm final price, delivery, return policy and stock with the merchant before purchasing.
+- Merchant trust is not independently certified by this application.
+- Gemini and SerpApi availability, quotas and model access depend on the user's provider accounts.
+- This application does not process payments or place orders.
+
+## Project structure
+
+```text
+ShopMate-AI/
+├── backend/
+│   ├── routers/
+│   ├── services/
+│   ├── tests/
+│   ├── main.py
+│   ├── models.py
+│   ├── schemas.py
+│   ├── database.py
+│   └── requirements.txt
+├── data/
+│   └── products.json
+├── frontend/
+│   ├── public/
+│   └── src/
+├── .gitignore
+└── README.md
 ```
