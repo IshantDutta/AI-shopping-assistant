@@ -28,7 +28,7 @@ def is_gemini_configured() -> bool:
 
 
 def get_gemini_model() -> str:
-    return os.getenv("GEMINI_MODEL", "gemini-3.8-flash").strip()
+    return os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip()
 
 
 def _fallback_advice(message: str, products: list[dict]) -> str:
