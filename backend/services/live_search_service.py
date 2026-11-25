@@ -147,9 +147,12 @@ def _get_merchant_offers(
             "condition": store.get("condition"),
         })
 
-    # Cheapest known merchant offer first.
+    # Prefer confirmed in-stock offers, then unknown offers, then out-of-stock.
+    # Within each availability group, prefer the lowest known price.
+    availability_order = {"in_stock": 0, "unknown": 1, "out_of_stock": 2}
     offers.sort(
         key=lambda offer: (
+            availability_order.get(offer["availability_status"], 1),
             offer["price"] is None,
             offer["price"] if offer["price"] is not None else float("inf"),
         )
