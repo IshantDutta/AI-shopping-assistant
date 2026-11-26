@@ -1,35 +1,82 @@
-# 🛍️ ShopMate AI — AI-Powered Shopping Assistant
+# 🛍️ ShopMate AI — Your Personal AI Shopping Assistant
 
-**ShopMate AI** is a full-stack AI-powered shopping assistant designed to simplify online shopping. It helps users discover products, explore shopping options, compare alternatives, and make more informed purchasing decisions through an intelligent conversational interface.
+**Shop smarter. Compare confidently. Buy with clarity.**
 
-🔗 **Live Demo:** https://ai-shopping-assistant-sable.vercel.app/  
-💻 **GitHub Repository:** https://github.com/IshantDutta/AI-shopping-assistant
+ShopMate AI is a full-stack AI-powered shopping assistant that helps users discover products, explore live shopping results, receive intelligent recommendations, and compare products before making a purchase.
+
+Instead of switching between multiple shopping platforms, ShopMate brings product discovery and AI-assisted decision-making into one place.
+
+<p align="center">
+  <a href="https://ai-shopping-assistant-sable.vercel.app/"><strong>🚀 Live Demo</strong></a>
+  &nbsp; | &nbsp;
+  <a href="https://github.com/IshantDutta/AI-shopping-assistant"><strong>💻 GitHub Repository</strong></a>
+</p>
+
+---
+
+## 🎬 Project Demo
+
+[▶ Watch the ShopMate AI Demo](Assets/demo/shopmate_demo.mp4)
+
+---
+
+## 📸 Screenshots
+
+### 1. Homepage and Dashboard
+![ShopMate Homepage](Assets/screenshots/01-homepage.png)
+
+### 2. Product Discovery and Catalog
+![Product Catalog](Assets/screenshots/02-product-catalog.png)
+
+### 3. Wishlist
+![Wishlist](Assets/screenshots/03-wishlist.png)
+
+### 4. AI-Powered Recommendations
+![AI Recommendations](Assets/screenshots/04-ai-recommendations..png)
+
+### 5. Live Shopping Results
+![Live Shopping Results](Assets/screenshots/05-live-shopping-results.png)
 
 ---
 
 ## ✨ Features
 
-- **AI Shopping Assistant:** Describe what you're looking for in natural language and receive AI-powered shopping guidance.
-- **Live Product Search:** Discover products through Google Shopping search integration.
-- **Product Discovery:** Browse products from a curated local catalog.
-- **Smart Product Comparison:** Compare multiple products based on available details and value.
-- **Availability-Aware Recommendations:** Account for product availability when evaluating comparison results.
-- **Wishlist:** Save products and revisit them later.
-- **Direct Merchant Links:** Navigate to merchant pages to explore purchasing options.
-- **Modern User Interface:** Responsive, dark-themed interface built for a clean shopping experience.
+- **AI Shopping Assistant:** Uses Google's Gemini AI to understand shopping requirements and generate contextual recommendations.
+- **Live Product Search:** Retrieves shopping results through SerpApi and Google Shopping.
+- **Product Discovery:** Browse a curated product catalog with images, prices, ratings, and descriptions.
+- **Smart Product Comparison:** Compare selected products and identify the best-value option using comparison scoring.
+- **Wishlist Management:** Save products for later and access them across page refreshes on the same browser.
+- **Budget-Based Discovery:** Explore products based on budget and category filters.
+- **Merchant Redirection:** Visit merchant pages directly through product purchase links.
+- **Responsive Interface:** A modern dark-themed interface built with React.
 
-## 🧰 Tech Stack
+---
 
-| Category | Technologies |
+## 🧠 How It Works
+
+1. The user describes what they want to purchase, including budget and requirements.
+2. The backend processes the request and retrieves relevant catalog and live shopping results.
+3. Gemini AI generates recommendations based on the user's requirements and available product information.
+4. Users explore product cards, save products, and select items for comparison.
+5. The comparison engine evaluates the selected products and highlights the best-value option.
+6. Users can proceed to the merchant website to verify the product and complete their purchase.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
 |---|---|
 | Frontend | React.js, Vite, CSS |
 | Backend | Python, FastAPI |
 | Database | SQLite, SQLAlchemy |
 | AI Integration | Google Gemini API |
-| Product Search | SerpApi / Google Shopping |
-| API Communication | REST APIs, HTTPX |
-| Deployment | Vercel, Render |
+| Live Shopping Search | SerpApi, Google Shopping |
+| API Validation | Pydantic |
 | Version Control | Git, GitHub |
+| Deployment | Vercel, Render |
+
+---
 
 ## 🏗️ Project Architecture
 
@@ -55,23 +102,35 @@ ShopMate-AI/
 │   ├── seed.py
 │   └── requirements.txt
 │
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── styles.css
+│   ├── package.json
+│   └── vite.config.js
+│
 ├── data/
 │   └── products.json
 │
-└── frontend/
-    ├── src/
-    │   ├── components/
-    │   ├── services/
-    │   ├── App.jsx
-    │   ├── main.jsx
-    │   └── styles.css
-    │
-    ├── index.html
-    ├── package.json
-    └── vite.config.js
+├── Assets/
+│   ├── screenshots/
+│   └── demo/
+│
+└── README.md
 ```
 
+---
+
 ## ⚙️ Run Locally
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js and npm
+- Git
 
 ### 1. Clone the repository
 
@@ -80,24 +139,19 @@ git clone https://github.com/IshantDutta/AI-shopping-assistant.git
 cd AI-shopping-assistant
 ```
 
-### 2. Set up the backend
+### 2. Backend setup
 
 ```bash
 cd backend
 
-python -m venv venv
+python -m venv .venv
 ```
 
 Activate the virtual environment:
 
-**Windows:**
+**Windows PowerShell**
 ```powershell
-venv\Scripts\activate
-```
-
-**macOS / Linux:**
-```bash
-source venv/bin/activate
+.venv\Scripts\Activate.ps1
 ```
 
 Install dependencies:
@@ -116,13 +170,7 @@ SERPAPI_API_KEY=your_serpapi_api_key
 SERPAPI_COUNTRY=in
 SERPAPI_LANGUAGE=en
 
-CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-```
-
-Seed the product catalog:
-
-```bash
-python seed.py
+CORS_ORIGINS=http://localhost:5173
 ```
 
 Start the backend:
@@ -131,12 +179,15 @@ Start the backend:
 python -m uvicorn main:app --reload
 ```
 
-Backend API: http://127.0.0.1:8000  
-API documentation: http://127.0.0.1:8000/docs
+Backend API:
+`http://127.0.0.1:8000`
 
-### 3. Set up the frontend
+Interactive API documentation:
+`http://127.0.0.1:8000/docs`
 
-Open a new terminal:
+### 3. Frontend setup
+
+Open a second terminal:
 
 ```bash
 cd frontend
@@ -155,60 +206,48 @@ Start the frontend:
 npm run dev
 ```
 
-Open http://localhost:5173 in your browser.
+Open:
+`http://localhost:5173`
 
-## 🔑 API Requirements
+---
 
-ShopMate AI uses external API integrations:
+## 🔑 API Integrations
 
-- **Google Gemini API:** Powers the AI shopping assistant.
-- **SerpApi:** Provides live Google Shopping search results.
-
-Obtain your own API keys and configure them in the backend `.env` file.
-
-**Security:** Never commit API keys, `.env` files, or other credentials to GitHub. Keep secrets on the backend.
-
-## 🚀 Deployment
-
-The application is deployed using:
-
-| Component | Platform |
+| Service | Purpose |
 |---|---|
-| Frontend | Vercel |
-| Backend | Render |
+| Google Gemini | AI-powered shopping assistance and recommendations |
+| SerpApi | Live Google Shopping search results |
+| FastAPI | Backend API and request handling |
 
-**Live application:**  
+**Note:** Gemini and SerpApi features require valid API keys. The local product catalog can be used independently of live shopping search.
+
+Never commit API keys or `.env` files to GitHub.
+
+---
+
+## 🌐 Deployment
+
+ShopMate AI is deployed using:
+
+- **Frontend:** Vercel
+- **Backend:** Render
+
+Live application:  
 https://ai-shopping-assistant-sable.vercel.app/
 
-The frontend communicates with the deployed FastAPI backend through the configured `VITE_API_BASE_URL`.
+The frontend communicates with the deployed FastAPI backend through the configured API base URL.
 
-*Note: The backend uses Render's free instance, which may spin down after inactivity. The first request after a period of inactivity can take longer to respond.*
-
-## 🧪 Testing
-
-The backend includes automated tests for core application functionality.
-
-Run them from the backend directory:
-
-```bash
-pytest -v
-```
-
-## 🎯 Project Objective
-
-The goal of ShopMate AI is to make online shopping more efficient by bringing product discovery, AI-assisted guidance, live shopping results, and product comparison into one unified platform.
-
-Rather than browsing multiple websites independently, users can describe their requirements and use ShopMate AI to narrow down their options.
+---
 
 ## 🔮 Future Improvements
 
-Potential areas for further development include:
-
 - User authentication and individual shopping profiles.
-- Cloud-based persistent storage.
-- Advanced recommendation and ranking algorithms.
-- Price tracking and price-drop notifications.
-- More shopping platform integrations.
+- Cloud-based wishlist synchronization.
+- Persistent database storage.
+- More advanced recommendation ranking.
+- Additional shopping platform integrations.
+
+---
 
 ## 👨‍💻 Author
 
@@ -216,11 +255,12 @@ Potential areas for further development include:
 
 Computer Science Engineering | AI & Data Science
 
-- GitHub: https://github.com/IshantDutta
-- Project: https://github.com/IshantDutta/AI-shopping-assistant
+- GitHub: [@IshantDutta](https://github.com/IshantDutta)
+- Project: [ShopMate AI](https://github.com/IshantDutta/AI-shopping-assistant)
+- Live Application: [ShopMate AI](https://ai-shopping-assistant-sable.vercel.app/)
 
 ---
 
-⭐ If you find this project interesting, consider giving the repository a star!
-
-**Built with curiosity, code, and a little help from AI.**
+<p align="center">
+  <strong>ShopMate AI — Less scrolling. Better decisions.</strong>
+</p>
