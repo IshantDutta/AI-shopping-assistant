@@ -105,6 +105,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("discover");
   const [mobileMenu, setMobileMenu] = useState(false);
   const [systemStatus, setSystemStatus] = useState(null);
+  const [backendOnline, setBackendOnline] = useState(null);
 
   const categories = useMemo(() => ["Headphones", "Earbuds", "Gaming Headset", "Laptops", "Accessories"], []);
 
@@ -113,6 +114,8 @@ export default function App() {
     try {
       const rows = await api.products({ query, category, max_price: budget });
       setProducts(rows);
+      setSelected([]);
+      setCompareItems(null);
       setSources(null);
     } catch (e) { setError(`${e.message}. Is the FastAPI backend running?`); }
     finally { setLoading(false); }
@@ -121,6 +124,7 @@ export default function App() {
   useEffect(() => {
     loadProducts();
     api.status().then(setSystemStatus).catch(() => setSystemStatus(null));
+    api.health().then(() => setBackendOnline(true)).catch(() => setBackendOnline(false));
   }, []); // Initial catalog and provider status.
 
   function toggleSaved(product) {
@@ -140,6 +144,8 @@ export default function App() {
     try {
       const result = await api.chat({ message, max_price: budget ? Number(budget) : null, category: category || null, use_live_search: true });
       setProducts(result.products || []);
+      setSelected([]);
+      setCompareItems(null);
       setAnswer(result.message || "");
       setSources(result.sources || null);
       setActiveTab("discover");
@@ -148,7 +154,7 @@ export default function App() {
   }
 
   async function compareSelected() {
-    const selectedProducts = products.filter((product) =>
+    const selectedProducts = visibleProducts.filter((product) =>
       selected.includes(product.id ?? product.product_url ?? product.name)
     );
     if (selectedProducts.length < 2) {
@@ -185,7 +191,7 @@ export default function App() {
         <header className="topbar">
           <button className="mobile-menu icon-button" onClick={() => setMobileMenu(!mobileMenu)}><Menu size={19}/></button>
           <div className="breadcrumb">Workspace <span>/</span> <b>{activeTab === "saved" ? "Wishlist" : "Discover products"}</b></div>
-          <div className="top-actions"><span className="top-status"><i className="online-dot"/> Systems operational</span><div className="top-avatar">S</div></div>
+          <div className="top-actions"><span className="top-status"><i className="online-dot" style={{background: backendOnline === false ? "#e47b87" : undefined}}/> {backendOnline === true ? "Backend connected" : backendOnline === false ? "Backend unavailable" : "Connecting..."}</span><div className="top-avatar">S</div></div>
         </header>
 
         <div className="content-wrap">
